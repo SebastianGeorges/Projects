@@ -1,13 +1,13 @@
 import axios from "axios";
 import { baseUrl } from "../../../utils/Constants";
 import {
-  getMembersFailure,
-  getMembersRequest,
-  getMembersSuccess,
+  addMemberRequest,
+  addMemberSuccess,
+  addMemberFailure,
 } from "../../types/members/membersTypes";
-import { getMembers } from "./getMembers";
+import {getMembers} from './getMembers.js'
 
-export const addMembers = (
+export const addMember = (
   email,
   password,
   firstName,
@@ -18,6 +18,7 @@ export const addMembers = (
   token
 ) => {
   return (dispatch) => {
+    dispatch(addMemberRequest());
     axios
       .post(
         `${baseUrl}/admins/add-member`,
@@ -37,13 +38,13 @@ export const addMembers = (
         }
       )
       .then((response) => {
-        console.log("response ", response.data);
+        console.log("response", response.data);
+        const data = response?.data;
+        dispatch(addMemberSuccess(data));
       })
       .catch((error) => {
         console.log("error: ", error);
+        return dispatch(addMemberFailure(error?.message));
       })
-      .finally(() => {
-        dispatch(getMembersSuccess(token))
-      });
   };
 };

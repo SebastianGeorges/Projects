@@ -27,7 +27,7 @@ const Members = () => {
         getMembers(token);
       });
   };
-  const onAddMembers = (
+  const addMembers = (
     email,
     password,
     firstName,
@@ -99,7 +99,7 @@ const Members = () => {
   return (
     <Grid container>
       <Grid item xs={4}>
-        <AddMembers onAddMembers={onAddMembers} />
+        <AddMembers addMembers={addMembers} />
       </Grid>
       <Grid item xs={8}>
         <TableMembers

@@ -2,8 +2,15 @@ import React, { useState, useEffect } from "react";
 import MyInput from "../../components/buttons/MyInput";
 import MyButton from "../../components/buttons/MyButton";
 import { Setter } from "../../utils/Setter";
+import { useDispatch, useSelector } from "react-redux";
+import { addMember } from '../../redux/actions/members/addMember.js'
 
-function AddMembers({onAddMembers}) {
+function AddMembers() {
+
+  const dispatch = useDispatch();
+  const hasErrors = useSelector((state) => state?.memberState?.hasErrors);
+  const loading = useSelector((state) => state?.memberState?.loading);
+
   const [firstName, setFirstName] = useState(window.localStorage.getItem("first"));
   const [lastName, setLastName] = useState(window.localStorage.getItem("last"));
   const [email, setEmail] = useState(window.localStorage.getItem("email"));
@@ -12,6 +19,7 @@ function AddMembers({onAddMembers}) {
   const [facebook, setFacebook] = useState(window.localStorage.getItem("facebook"));
   const [avatar, setAvatar] = useState(window.localStorage.getItem("avatar"));
   const [accessToken, setAccessToken] = useState('');
+
   useEffect(() => {
     setAccessToken(window.localStorage.getItem("token"));
   },[accessToken])
@@ -89,11 +97,12 @@ function AddMembers({onAddMembers}) {
           value={avatar?.length > 0 ? avatar : ""}
         />
       </form>
-      <MyButton type="submit" onClick={() => onAddMembers(email, password, firstName, lastName, linkedIn, facebook, avatar, accessToken)} disabled={false}>
+      <MyButton type="submit" onClick={() => dispatch(addMember(email, password, firstName, lastName, linkedIn, facebook, avatar, accessToken))} disabled={false}>
         Add member
       </MyButton>
+      {hasErrors?.status ? alert(hasErrors?.message) : null}
     </>
   );
 }
-export default AddMembers;
 
+export default AddMembers;
