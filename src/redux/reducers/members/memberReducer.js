@@ -29,10 +29,6 @@ export const memberReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        hasErrors: {
-          message: "",
-          status: false,
-        },
         members: [...action?.payload],
       };
     case GET_MEMBERS_FAILURE:

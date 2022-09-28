@@ -16,7 +16,7 @@ function AddMembers() {
   );
   const [lastName, setLastName] = useState(window.localStorage.getItem("last"));
   const [email, setEmail] = useState(window.localStorage.getItem("email"));
-  const [position, setPosition] = useState("");
+  const [position, setPosition] = useState();
   const [linkedIn, setLinkedIn] = useState(
     window.localStorage.getItem("linkedIn")
   );
