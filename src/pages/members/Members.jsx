@@ -7,6 +7,7 @@ import axios from "axios";
 import { baseUrl } from "../../utils/Constants";
 import { useState } from "react";
 import { useEffect } from "react";
+import { deleteMember } from "../../redux/actions/members/deleteMember";
 
 const Members = () => {
   const [updatedMembers, setUpdatedMembers] = useState([]);
@@ -99,16 +100,14 @@ const Members = () => {
   return (
     <Grid container>
       <Grid item xs={4}>
-        <AddMembers addMembers={addMembers} />
+        <AddMembers />
       </Grid>
       <Grid item xs={8}>
         <TableMembers
-          getMembers={getMembers}
           updatedMembers={updatedMembers}
           setMemberIdProps={setMemberIdProps}
         />
         <DeleteMembers
-          deleteMemberById={deleteMemberById}
           memberIdProps={memberIdProps}
           setMemberIdProps={setMemberIdProps}
         />
