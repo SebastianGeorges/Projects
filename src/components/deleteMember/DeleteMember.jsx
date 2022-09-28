@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import MyButton from "../../components/buttons/MyButton";
 import { Box } from "@mui/system";
+import { useDispatch } from "react-redux";
+import { deleteMember } from "../../redux/actions/members/deleteMember";
 
 const DeleteMembers = ({deleteMemberById, memberIdProps, setMemberIdProps}) => {
-
+  
+  const dispatch = useDispatch()
   const [memberId, setMemberId] = useState('');
   const [accessToken, setAccessToken] = useState("");
 
@@ -26,7 +29,7 @@ const DeleteMembers = ({deleteMemberById, memberIdProps, setMemberIdProps}) => {
       }}
     >
       <h3>Delete selected member</h3>
-      <MyButton disabled={memberId.length > 0 ? false : true} style={{ color: "red" }} type="submit" variant="outlined" onClick={() => {deleteMemberById(memberId, accessToken); setMemberId(''); setMemberIdProps('')}}>
+      <MyButton disabled={memberId.length > 0 ? false : true} style={{ color: "red" }} type="submit" variant="outlined" onClick={() => dispatch(deleteMember(memberId, accessToken))}>
         Delete
       </MyButton>
       

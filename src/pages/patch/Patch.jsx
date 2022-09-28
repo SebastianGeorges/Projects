@@ -7,6 +7,7 @@ import { Grid } from "@mui/material";
 const Patch = () => {
 
   const [isDisabled, setIsDisabled] = useState(true);
+  // eslint-disable-next-line 
   const [admin, setAdmin] = useState(JSON.parse(window.localStorage.getItem("admin")))
   
   useEffect(() => {

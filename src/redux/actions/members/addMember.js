@@ -9,9 +9,9 @@ import {getMembers} from './getMembers.js'
 
 export const addMember = (
   email,
-  password,
   firstName,
   lastName,
+  position,
   linkedIn,
   facebook,
   avatar,
@@ -24,9 +24,9 @@ export const addMember = (
         `${baseUrl}/admins/add-member`,
         {
           email: email,
-          password: password,
           firstName: firstName,
           lastName: lastName,
+          position: position,
           linkedIn: linkedIn,
           facebook: facebook,
           avatar: avatar,
@@ -44,7 +44,10 @@ export const addMember = (
       })
       .catch((error) => {
         console.log("error: ", error);
-        return dispatch(addMemberFailure(error?.message));
+        dispatch(addMemberFailure(error?.response?.data?.error));
       })
+      .finally(() => {
+        dispatch(getMembers(token))
+      });
   };
 };
