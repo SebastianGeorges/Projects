@@ -8,7 +8,6 @@ import { addMember } from "../../redux/actions/members/addMember.js";
 function AddMembers() {
   const dispatch = useDispatch();
   const hasErrors = useSelector((state) => state?.membersState?.hasErrors);
-  // eslint-disable-next-line 
   const loading = useSelector((state) => state?.membersState?.loading);
 
   const [firstName, setFirstName] = useState(
@@ -16,10 +15,13 @@ function AddMembers() {
   );
   const [lastName, setLastName] = useState(window.localStorage.getItem("last"));
   const [email, setEmail] = useState(window.localStorage.getItem("email"));
-  const [position, setPosition] = useState("");
+  const [position, setPosition] = useState(
+    window.localStorage.getItem("position")
+  );
   const [linkedIn, setLinkedIn] = useState(
     window.localStorage.getItem("linkedIn")
   );
+  
   const [facebook, setFacebook] = useState(
     window.localStorage.getItem("facebook")
   );
@@ -31,8 +33,8 @@ function AddMembers() {
   }, [accessToken]);
 
   useEffect(() => {
-    console.log("hasErrors", hasErrors);
-  }, [hasErrors]);
+    console.log("has errors: ",hasErrors)
+  },[hasErrors])
 
   return (
     <>
@@ -71,13 +73,14 @@ function AddMembers() {
           onChange={(el) => Setter(el, setLastName, "last")}
           value={lastName?.length > 0 ? lastName : ""}
         />
-        <label htmlFor="Position">Position</label>
+        <label htmlFor="position">Position</label>
         <MyInput
           type="text"
           id="position"
           name="position"
           placeholder="Position"
-          onChange={(event) => setPosition(event.target.value)}
+          onChange={(event) => Setter(event, setPosition, "position")}
+          value={position?.length > 0 ? position : ""}
         />
         <label htmlFor="linkedIn">LinkedIn</label>
         <MyInput
@@ -113,9 +116,9 @@ function AddMembers() {
           dispatch(
             addMember(
               email,
+              position,
               firstName,
               lastName,
-              position,
               linkedIn,
               facebook,
               avatar,
@@ -127,9 +130,7 @@ function AddMembers() {
       >
         Add member
       </MyButton>
-      {hasErrors?.status ? (
-        <p style={{ color: "#ff0000" }}>{hasErrors?.message}</p>
-      ) : null}
+      {hasErrors?.status ? (<p style={{color: "#ff0000"}}>{hasErrors?.message}</p>) : null}
     </>
   );
 }
