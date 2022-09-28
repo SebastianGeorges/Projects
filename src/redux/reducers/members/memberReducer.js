@@ -36,8 +36,8 @@ export const memberReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         hasErrors: {
-          status: true,
-          message: action?.payload?.message,
+          status: action?.payload?.error ? true : false,
+          message: action?.payload?.message ? action?.payload?.message : '',
         },
       };
     case ADD_MEMBER_REQUEST:
@@ -50,8 +50,8 @@ export const memberReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         hasErrors: {
-          status: false,
-          message: '',
+          status: action?.payload?.error ? true : false,
+          message: action?.payload?.message ? action?.payload?.message : '',
         },
         member: action?.payload?.member
       };
@@ -60,8 +60,8 @@ export const memberReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         hasErrors: {
-          status: true,
-          message: action?.payload,
+          status: action?.payload?.error ? true : false,
+          message: action?.payload?.message ? action?.payload?.message : '',
         },
       };
     default:
