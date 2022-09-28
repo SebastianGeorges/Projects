@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import MyButton from "../../components/buttons/MyButton";
 import { Box } from "@mui/system";
+import { deleteMemberBy } from "../../redux/actions/members/deleteMember";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const DeleteMembers = ({deleteMemberById, memberIdProps, setMemberIdProps}) => {
+  const dispatch = useDispatch();
+  const hasErrors = useSelector((state) => state?.memberState?.hasErrors);
+  const loading = useSelector((state) => state?.memberState?.loading);
 
   const [memberId, setMemberId] = useState('');
   const [accessToken, setAccessToken] = useState("");
@@ -26,10 +32,11 @@ const DeleteMembers = ({deleteMemberById, memberIdProps, setMemberIdProps}) => {
       }}
     >
       <h3>Delete selected member</h3>
-      <MyButton disabled={memberId.length > 0 ? false : true} style={{ color: "red" }} type="submit" variant="outlined" onClick={() => {deleteMemberById(memberId, accessToken); setMemberId(''); setMemberIdProps('')}}>
+      <MyButton disabled={memberId.length > 0 ? false : true} style={{ color: "red" }} type="submit" variant="outlined" onClick={() => dispatch(deleteMemberBy(memberId, accessToken))
+       }>
         Delete
       </MyButton>
-      
+      {hasErrors?.status ? alert(hasErrors?.message) : null}
     </Box>
   );
 };

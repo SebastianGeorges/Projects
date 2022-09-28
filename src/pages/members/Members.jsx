@@ -7,6 +7,7 @@ import axios from "axios";
 import { baseUrl } from "../../utils/Constants";
 import { useState } from "react";
 import { useEffect } from "react";
+import { deleteMemberBy } from "../../redux/actions/members/deleteMember";
 
 const Members = () => {
   const [updatedMembers, setUpdatedMembers] = useState([]);
@@ -108,7 +109,7 @@ const Members = () => {
           setMemberIdProps={setMemberIdProps}
         />
         <DeleteMembers
-          deleteMemberById={deleteMemberById}
+          deleteMemberById={deleteMemberBy}
           memberIdProps={memberIdProps}
           setMemberIdProps={setMemberIdProps}
         />

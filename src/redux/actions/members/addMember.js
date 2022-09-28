@@ -46,5 +46,8 @@ export const addMember = (
         console.log("error: ", error);
         return dispatch(addMemberFailure(error?.message));
       })
+      .finally(() => {
+        dispatch(getMembers(token));
+      })
   };
 };
