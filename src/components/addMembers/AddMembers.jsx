@@ -130,7 +130,9 @@ function AddMembers() {
       >
         Add member
       </MyButton>
-      {hasErrors?.status ? (<p style={{color: "#ff0000"}}>{hasErrors?.message}</p>) : null}
+      {hasErrors?.message?.length > 0 ? (
+        <p style={{ color: "#ff0000" }}>{hasErrors?.message}</p>
+      ) : null}
     </>
   );
 }
