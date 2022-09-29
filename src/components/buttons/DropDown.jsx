@@ -10,6 +10,8 @@ import axios from "axios";
 import { baseUrl } from "../../utils/Constants";
 import { Setter } from "../../utils/Setter";
 import { Box } from "@mui/system";
+import { useDispatch } from "react-redux";
+import { addPost } from "../../redux/actions/posts/addPost";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -55,52 +57,27 @@ const StyledMenu = styled((props) => (
 }));
 
 function DropDown() {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const dispatch = useDispatch()
+  const [anchorEl, setAnchorEl] = useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorEl(false);
   };
-  const [title, setTitle] = useState(window.localStorage.getItem("title"));
-  const [subTitle, setSubTitle] = useState(
+  const [postTitle, setTitle] = useState(window.localStorage.getItem("title"));
+  const [postSubtitle, setSubTitle] = useState(
     window.localStorage.getItem("subTitle")
   );
-  const [photo, setPhoto] = useState(window.localStorage.getItem("photo"));
-  const [description, setDescription] = useState(
+  const [postPhoto, setPhoto] = useState(window.localStorage.getItem("photo"));
+  const [postDescription, setDescription] = useState(
     window.localStorage.getItem("description")
   );
   const [accessToken, setAccessToken] = useState("");
 
-  const onAddPosts = () => {
-    axios
-      .post(
-        `${baseUrl}/admins/add-member`,
-        {
-          title: title,
-          subTitle: subTitle,
-          description: description,
-          photo: photo,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
-      .then((response) => {
-        console.log("response ", response.data);
-        window.localStorage.setItem("token", response.data.accessToken);
-        // window.location.pathname = "/home";
-      })
-      .catch((error) => {
-        console.log("error: ", error);
-      })
-      .finally(() => {
-        setAnchorEl(null);
-      });
-  };
+  
+
   useEffect(() => {
     setAccessToken(window.localStorage.getItem("token"));
     // eslint-disable-next-line
@@ -145,7 +122,7 @@ function DropDown() {
             name="title"
             placeholder="Title"
             onChange={(et) => Setter(et, setTitle, "title")}
-            value={title?.length > 0 ? title : ""}
+            value={postTitle?.length > 0 ? postTitle : ""}
           />
           <br />
           <label htmlFor="Subtitle">Subtitle</label>
@@ -156,7 +133,7 @@ function DropDown() {
             name="subtitle"
             placeholder="Subtitle"
             onChange={(est) => Setter(est, setSubTitle, "subTitle")}
-            value={subTitle?.length > 0 ? subTitle : ""}
+            value={postSubtitle?.length > 0 ? postSubtitle : ""}
           />
           <br />
           <label htmlFor="Description">Description</label>
@@ -167,7 +144,7 @@ function DropDown() {
             name="description"
             placeholder="Description"
             onChange={(ed) => Setter(ed, setDescription, "description")}
-            value={description?.length > 0 ? description : ""}
+            value={postDescription?.length > 0 ? postDescription : ""}
           />
           <br />
           <label htmlFor="Photo">Photo</label>
@@ -179,10 +156,21 @@ function DropDown() {
             placeholder="Add a photo base64"
 
             onChange={(ef) => Setter(ef, setPhoto, "photo")}
-            value={photo?.length > 0 ? photo : ""}
+            value={postPhoto?.length > 0 ? postPhoto : ""}
           />
           <br />
-          <Button onClick={onAddPosts} disableRipple>
+          <Button onClick={() =>
+            dispatch(
+              addPost(
+                postTitle,
+                postSubtitle,
+                postDescription,
+                postPhoto,
+                accessToken
+              )
+            )
+          }
+          disabled={false} disableRipple>
             <PostAddIcon />
             Post
           </Button>
