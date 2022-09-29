@@ -10,8 +10,12 @@ import axios from "axios";
 import { baseUrl } from "../../utils/Constants";
 import { Setter } from "../../utils/Setter";
 import { Box } from "@mui/system";
+import { useDispatch } from "react-redux";
+import { addPosts } from '../../redux/actions/posts/addPost.js'
+import { useSelector } from "react-redux";
 
 const StyledMenu = styled((props) => (
+ 
   <Menu
     elevation={0}
     anchorOrigin={{
@@ -55,6 +59,9 @@ const StyledMenu = styled((props) => (
 }));
 
 function DropDown() {
+  const dispatch = useDispatch()
+  const hasErrors = useSelector((state) => state?.postsState?.hasErrors);
+  const loading = useSelector((state) => state?.postsState?.loading);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -63,44 +70,17 @@ function DropDown() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [title, setTitle] = useState(window.localStorage.getItem("title"));
-  const [subTitle, setSubTitle] = useState(
+  const [postTitle, setPostTitle] = useState(window.localStorage.getItem("title"));
+  const [postSubtitle, setPostSubtitle] = useState(
     window.localStorage.getItem("subTitle")
   );
-  const [photo, setPhoto] = useState(window.localStorage.getItem("photo"));
-  const [description, setDescription] = useState(
+  const [postPhoto, setPostPhoto] = useState(window.localStorage.getItem("photo"));
+  const [postDescription, setPostDescription] = useState(
     window.localStorage.getItem("description")
   );
   const [accessToken, setAccessToken] = useState("");
 
-  const onAddPosts = () => {
-    axios
-      .post(
-        `${baseUrl}/admins/add-member`,
-        {
-          title: title,
-          subTitle: subTitle,
-          description: description,
-          photo: photo,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
-      .then((response) => {
-        console.log("response ", response.data);
-        window.localStorage.setItem("token", response.data.accessToken);
-        // window.location.pathname = "/home";
-      })
-      .catch((error) => {
-        console.log("error: ", error);
-      })
-      .finally(() => {
-        setAnchorEl(null);
-      });
-  };
+  
   useEffect(() => {
     setAccessToken(window.localStorage.getItem("token"));
     // eslint-disable-next-line
@@ -144,8 +124,8 @@ function DropDown() {
             id="title"
             name="title"
             placeholder="Title"
-            onChange={(et) => Setter(et, setTitle, "title")}
-            value={title?.length > 0 ? title : ""}
+            onChange={(et) => Setter(et, setPostTitle, "title")}
+            value={postTitle?.length > 0 ? postTitle : ""}
           />
           <br />
           <label htmlFor="Subtitle">Subtitle</label>
@@ -155,8 +135,8 @@ function DropDown() {
             id="subtitle"
             name="subtitle"
             placeholder="Subtitle"
-            onChange={(est) => Setter(est, setSubTitle, "subTitle")}
-            value={subTitle?.length > 0 ? subTitle : ""}
+            onChange={(est) => Setter(est, setPostSubtitle, "subTitle")}
+            value={postSubtitle?.length > 0 ? postSubtitle : ""}
           />
           <br />
           <label htmlFor="Description">Description</label>
@@ -166,8 +146,8 @@ function DropDown() {
             id="description"
             name="description"
             placeholder="Description"
-            onChange={(ed) => Setter(ed, setDescription, "description")}
-            value={description?.length > 0 ? description : ""}
+            onChange={(ed) => Setter(ed, setPostDescription, "description")}
+            value={postDescription?.length > 0 ? postDescription : ""}
           />
           <br />
           <label htmlFor="Photo">Photo</label>
@@ -178,14 +158,23 @@ function DropDown() {
             name="photo"
             placeholder="Add a photo base64"
 
-            onChange={(ef) => Setter(ef, setPhoto, "photo")}
-            value={photo?.length > 0 ? photo : ""}
+            onChange={(ef) => Setter(ef, setPostPhoto, "photo")}
+            value={postPhoto?.length > 0 ? postPhoto : ""}
           />
           <br />
-          <Button onClick={onAddPosts} disableRipple>
+          <Button onClick={() =>
+            dispatch(
+              addPosts(postTitle,
+                postSubtitle,
+                postDescription,
+                postPhoto,
+                accessToken))} disableRipple>
             <PostAddIcon />
             Post
           </Button>
+          {hasErrors?.message?.length > 0 ? (
+            <p style={{ color: "#ff0000" }}>{hasErrors?.message}</p>
+          ) : null}
         </StyledMenu>
       </Box>
     </div>

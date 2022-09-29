@@ -64,8 +64,8 @@ export const memberReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         hasErrors: {
-          status: action?.payload?.error ? true : false,
-          message: action?.payload?.message ? action?.payload?.message : '',
+          status: true,
+          message: action?.payload,
         },
       };
       case DELETE_MEMBER_REQUEST:
@@ -88,8 +88,9 @@ export const memberReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         hasErrors: {
-          status: action?.payload?.error ? true : false,
-          message: action?.payload?.message ? action?.payload?.message : '',
+          status: true,
+          message: action?.payload,
+        
         },
       };
     
