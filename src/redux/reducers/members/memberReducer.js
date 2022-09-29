@@ -5,6 +5,9 @@ import {
   ADD_MEMBER_REQUEST,
   ADD_MEMBER_SUCCESS,
   ADD_MEMBER_FAILURE,
+  DELETE_MEMBER_REQUEST,
+  DELETE_MEMBER_SUCCESS,
+  DELETE_MEMBER_FAILURE,
 } from "../../types/members/membersTypes";
 
 const initialState = {
@@ -64,7 +67,33 @@ export const memberReducer = (state = initialState, action) => {
           message: action?.payload?.message ? action?.payload?.message : '',
         },
       };
-    default:
+      case DELETE_MEMBER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DELETE_MEMBER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        hasErrors: {
+          status: action?.payload?.error ? true : false,
+          message: action?.payload?.message ? action?.payload?.message : '',
+        },
+        member: action?.payload?.member
+      };
+    case DELETE_MEMBER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        hasErrors: {
+          status: action?.payload?.error ? true : false,
+          message: action?.payload?.message ? action?.payload?.message : '',
+        },
+      };
+    
+    
+      default:
       return state;
   }
 };
