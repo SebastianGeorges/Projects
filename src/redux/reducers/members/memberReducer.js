@@ -10,6 +10,7 @@ import {
   DELETE_MEMBER_FAILURE,
 } from "../../types/members/membersTypes";
 
+// * Const
 const initialState = {
   loading: false,
   hasErrors: {
