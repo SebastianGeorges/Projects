@@ -5,8 +5,12 @@ import {
   ADD_MEMBER_REQUEST,
   ADD_MEMBER_SUCCESS,
   ADD_MEMBER_FAILURE,
+  DELETE_MEMBER_REQUEST,
+  DELETE_MEMBER_SUCCESS,
+  DELETE_MEMBER_FAILURE,
 } from "../../types/members/membersTypes";
 
+// * Const
 const initialState = {
   loading: false,
   hasErrors: {
@@ -29,10 +33,6 @@ export const memberReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        hasErrors: {
-          message: "",
-          status: false,
-        },
         members: [...action?.payload],
       };
     case GET_MEMBERS_FAILURE:
@@ -40,8 +40,8 @@ export const memberReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         hasErrors: {
-          status: true,
-          message: action?.payload?.message,
+          status: action?.payload?.error ? true : false,
+          message: action?.payload?.message ? action?.payload?.message : '',
         },
       };
     case ADD_MEMBER_REQUEST:
@@ -54,8 +54,8 @@ export const memberReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         hasErrors: {
-          status: false,
-          message: '',
+          status: action?.payload?.error ? true : false,
+          message: action?.payload?.message ? action?.payload?.message : '',
         },
         member: action?.payload?.member
       };
@@ -64,11 +64,37 @@ export const memberReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         hasErrors: {
-          status: true,
-          message: action?.payload,
+          status: action?.payload?.error ? true : false,
+          message: action?.payload?.message ? action?.payload?.message : '',
         },
       };
-    default:
+      case DELETE_MEMBER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DELETE_MEMBER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        hasErrors: {
+          status: action?.payload?.error ? true : false,
+          message: action?.payload?.message ? action?.payload?.message : '',
+        },
+        member: action?.payload?.member
+      };
+    case DELETE_MEMBER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        hasErrors: {
+          status: action?.payload?.error ? true : false,
+          message: action?.payload?.message ? action?.payload?.message : '',
+        },
+      };
+    
+    
+      default:
       return state;
   }
 };
