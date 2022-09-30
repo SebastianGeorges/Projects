@@ -30,7 +30,7 @@ import { GET_POSTS_FAILURE,
         return {
           ...state,
           loading: false,
-          members: [...action?.payload],
+          posts: [...action?.payload],
         };
       case GET_POSTS_FAILURE:
         return {
